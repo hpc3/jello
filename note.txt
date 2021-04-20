@@ -1,0 +1,43 @@
+Jello [a trello clone]
+
+Decided to pick up Vue.js and GraphQL
+
+Also saw neumorphism on reddit at like 2am and thought it looked cool so yeah
+    I'm not sure if I still think it's cool but 
+
+Frontend:
+
+    Stack:
+        Vue/Vue Router
+        Vue-Apollo
+        Tailwind
+
+    Login
+        Error Handling
+        Grapqhl Mutation
+        Styling 
+    Registration
+        Error Handling
+        Grapqhl Mutation
+        Styling 
+    Logged In Home
+        Mockup
+    Project View
+        Mockup
+
+Backend:
+
+    Stack:
+        Express
+        GraphQL
+        Apollo-server-express
+
+        Storage is just json-server for the time being 
+
+    Queries:
+        Current User
+        All Users
+    Mutations:
+        Login
+        Create New User/Registartion
+

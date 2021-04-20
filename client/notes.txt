@@ -1,0 +1,110 @@
+
+    .vue files require webpack
+    as such
+    If you are just setting up vue using the cdn you need to use vue({}) and vue.componenet()
+
+
+
+    you can import function etc. using a script tag and the src attribute
+    just add it below the template 
+     [also works for CSS]
+    
+
+
+Why is data a function that returns an object?
+    Scope
+    Otherwise every instance of that component would share the same data 
+
+    Vue Projects [Trello Clone] [[Little bit more than just a todo list]]
+        Use router
+        Write Tests
+
+    One page displays all the projects that a users has
+    Second page displays that project along with the tasks
+        [To-Do, In Progress, Completed]
+    Components
+        -Task [card with a select to change the task status]
+        -Project [rendered on home page]
+
+
+    Day 1.5:
+
+    On first page load grab the Projects Data [Project Title and Project ID]
+
+    When you navigate to a project pull down the tasks and render them into lists 
+
+    Ability to move the tasks from list to list [Check]
+
+    Button to Create a new task [Done]
+        Done from inside taskList
+        ;) focus on input when it is rendered onto the page 
+
+
+    Button to create a new List [Done]
+        Dynamically create the task lists
+
+
+        ***LOOP OVER TASK OPTIONS IN SEPERATETAKS PROJECT.JS*** [v] 
+
+    What's done?
+
+        Navigate to different projects
+        Work on projects without existing tasks
+        Move data to different task lists
+        Create new tasks
+        Create new task lists
+
+    Next Steps:
+
+
+
+
+
+    DB Structure:
+
+
+    user{
+        allProjects:{
+            uid: {projectTitle: string},
+        },
+        projects{
+            uid: {
+                title: String,
+                tasks: [] Array
+            }
+        }
+    }
+
+
+    Task: 
+
+
+
+
+    DUMP
+    projects: [
+        {
+          id: 0,
+          title: "the-stand",
+          taskItems: [
+            { taskId: 0, status: "To-Do", title: "Fix Thing" },
+
+            { taskId: 1, status: "In Progress", title: "Auth" },
+            { taskId: 2, status: "Completed", title: "Other" },
+            { taskId: 3, status: "To-Do", title: "Fix Other Thing" },
+          ],
+          taskStatusTypes: ["To-Do", "In Progress", "Completed"],
+        },
+        { id: 1, title: "portfolio" },
+        { id: 2, title: "f-w" },
+      ],
+
+
+
+
+
+
+
+
+
+
