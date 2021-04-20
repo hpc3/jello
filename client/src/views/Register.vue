@@ -186,7 +186,7 @@ export default {
           },
         })
         .then((res) => {
-          const { user, token } = res.data.loginUser;
+          const { user, token } = res.data.createNewUser;
 
           localStorage.setItem("jello-token", token);
           this.$router.push({
