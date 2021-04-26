@@ -1,59 +1,82 @@
+
+
 <template>
   <div class="home">
     <h1>Projects</h1>
-    <h1>{{ this.$route.path }}</h1>
+    <h2 v-show="error.length" class="text-red-500">{{ error }}</h2>
+
     <div id="project-wrapper">
       <project-card
-        v-for="project in projects"
+        v-for="project in me.projects"
         :key="project.id"
         :projectTitle="project.title"
         :projectId="project.id"
-        :projectTasks="project.taskItems"
-        :projectTaskStatusTypes="project.taskStatusTypes"
       >
       </project-card>
-    </div>
+      <button id="addNewProjectButton" @click="openThing">
+        <div
+          class="border-green-600 rounded-full border-2 flex flex-1 items-center justify-center text-5xl text-green-500"
+          style="height: 10px; width: 10px"
+        >
+          +
+        </div>
+        <h1 class="flex-1">New Project</h1>
+      </button>
 
-    <!-- <HelloWorld  /> -->
+      <create-new-project
+        v-if="displayCreateNewProjectModal"
+        @close-modal="displayCreateNewProjectModal = false"
+        @added-new-project="addNewProject"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-
+import gql from "graphql-tag";
 import ProjectCard from "../components/ProjectCard.vue";
-
-// console.log(this.data.$route);
+import CreateNewProject from "../components/CreateNewProject.vue";
 
 export default {
-  components: { "project-card": ProjectCard },
-  name: "Home",
-  props: {
-    userData: {
-      type: Object,
-      required: true,
-    },
+  components: {
+    "project-card": ProjectCard,
+    "create-new-project": CreateNewProject,
   },
+  name: "Home",
+
   data() {
     return {
-      projects: [
-        {
-          id: 0,
-          title: "the-stand",
-          taskItems: [
-            { taskId: 0, status: "To-Do", title: "Fix Thing" },
-
-            { taskId: 1, status: "In Progress", title: "Auth" },
-            { taskId: 2, status: "Completed", title: "Other" },
-            { taskId: 3, status: "To-Do", title: "Fix Other Thing" },
-          ],
-          taskStatusTypes: ["To-Do", "In Progress", "Completed"],
-        },
-        { id: 1, title: "portfolio" },
-        { id: 2, title: "f-w" },
-      ],
+      displayCreateNewProjectModal: false,
+      error: "",
     };
+  },
+  apollo: {
+    me: {
+      query: gql`
+        query GetProjects($id: ID!) {
+          me(id: $id) {
+            username
+            projects {
+              id
+              title
+            }
+          }
+        }
+      `,
+      variables: {
+        id: localStorage.getItem("jello-userID"),
+      },
+    },
+  },
+  methods: {
+    openThing: function () {
+      this.displayCreateNewProjectModal = true;
+    },
+    addNewProject: function (project) {
+      this.me.projects.push(project);
+
+      this.displayCreateNewProjectModal = false;
+    },
   },
 };
 </script>
@@ -65,5 +88,14 @@ export default {
 
 li {
   list-style: none;
+}
+
+#addNewProjectButton {
+  display: flex;
+  align-items: flex-end;
+  box-sizing: border-box;
+  height: 100px;
+  width: 100px;
+  border: 2px solid black;
 }
 </style>
