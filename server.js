@@ -2,6 +2,8 @@ const express = require("express");
 const { ApolloServer, gql } = require("apollo-server-express");
 const { default: axios } = require("axios");
 
+require("dotenv/config");
+
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -17,10 +19,24 @@ async function startApolloServer() {
     }
 
     type User {
-      id: ID
-      username: String
-      password: String
-      email: String
+      id: ID!
+      username: String!
+      password: String!
+      email: String!
+      projects: [Project]!
+    }
+
+    type Project {
+      id: ID!
+      title: String!
+      tasks: [Task]
+    }
+
+    type Task {
+      id: ID!
+      title: String!
+      status: String!
+      description: String
     }
 
     type LoginObject {
@@ -35,6 +51,7 @@ async function startApolloServer() {
         password: String!
         email: String!
       ): LoginObject
+      createNewProject(id: ID!, title: String!): Project
     }
   `;
 
@@ -129,6 +146,7 @@ async function startApolloServer() {
               email,
               id: Date.now().toString(),
               password: hashedPassword,
+              projects: [],
             };
 
             await axios.post("http://localhost:3000/users", user);
@@ -144,6 +162,39 @@ async function startApolloServer() {
           } else {
             throw new Error("Missing Data");
           }
+        } catch (error) {
+          return error;
+        }
+      },
+      createNewProject: async (parent, { title, id }) => {
+        try {
+          const response = await axios.get(`http://localhost:3000/users/${id}`);
+
+          const userData = response.data;
+
+          const { projects } = userData;
+
+          const checkIfRedundantTitle = projects.some(
+            (proj) => proj.title === title
+          );
+
+          if (checkIfRedundantTitle) {
+            throw new Error("Project Already Exsits");
+          }
+
+          const project = {
+            id: Date.now(),
+            title,
+            tasks: [],
+          };
+
+          projects.push(project);
+
+          await axios.patch(`http://localhost:3000/users/${id}`, {
+            projects,
+          });
+
+          return project;
         } catch (error) {
           return error;
         }
