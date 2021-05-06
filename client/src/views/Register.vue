@@ -1,18 +1,11 @@
 <template>
-  <div
-    class="flex flex-col items-center justify-center h-screen w-screen"
-    style="background: #eceff9"
-  >
+  <div class="flex flex-col items-center justify-center h-screen">
     <div
-      class="rounded-xl h-3/4 w-5/6 md:w-1/2 max-w-lg items-center flex flex-col justify-evenly testContainer py-4"
-      style="background: #eceff9"
+      class="rounded-xl h-3/4 w-5/6 md:w-1/2 max-w-lg items-center flex flex-col justify-evenly testContainer"
     >
       <h2 class="text-3xl text-blue-400">Register</h2>
 
-      <form
-        class="flex flex-col items-start w-5/6 max-w-xs"
-        @submit="submitForm"
-      >
+      <form class="flex flex-col items-start w-10/12 sm:w-3/4">
         <h4 v-show="error.length" class="text-red-500">{{ error }}</h4>
         <h3 class="pl-3">Username</h3>
         <h4 v-show="errorUsername.length" class="text-red-500 pl-3">
@@ -48,27 +41,26 @@
           v-model="confirmPassword"
           class="focus:outline-none h-8 rounded-2xl m-1 pl-5 shadow-neumorButton focus:shadow-inner w-full"
         />
-        <div
-          class="flex w-11/12 md:2/3 justify-around items-center self-center mt-5"
-        >
-          <router-link
-            class="rounded-3xl w-32 h-11 text-red-500 p-2 shadow-neumorButton focus:outline-none active:shadow-inner"
-            style="background: #eceff9"
-            to="/"
-          >
-            Cancel
-          </router-link>
-          <!-- <button>huh</button> -->
-
-          <button
-            class="rounded-3xl w-32 h-11 text-green-500 p-2 shadow-neumorButton focus:outline-none active:shadow-inner"
-            style="background: #eceff9"
-            type="submit"
-          >
-            Submit
-          </button>
-        </div>
       </form>
+      <div
+        class="flex w-10/12 sm:w-3/4 justify-around items-center self-center"
+      >
+        <router-link
+          class="flex justify-center items-center rounded-3xl sm:w-32 w-24 h-11 text-red-500 p-2 shadow-neumorButton focus:outline-none regButton"
+          style="background: #eceff9"
+          to="/"
+        >
+          Cancel
+        </router-link>
+
+        <button
+          class="flex justify-center items-center rounded-3xl sm:w-32 w-24 h-11 text-green-500 p-2 shadow-neumorButton focus:outline-none regButton"
+          style="background: #eceff9"
+          @click="submitForm"
+        >
+          Submit
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -149,10 +141,12 @@ export default {
         return;
       }
 
-      if (password.length < 9) {
-        this.error.password = "Password must be 8 characters";
+      if (password.length < 8) {
+        this.error = "Password must be 8 characters";
         return;
-      } else if (password !== this.confirmPassword) {
+      }
+
+      if (password !== this.confirmPassword) {
         this.error = "Passwords don't match";
         return;
       }
@@ -188,10 +182,12 @@ export default {
         .then((res) => {
           const { user, token } = res.data.createNewUser;
 
+          const { id } = user;
+
           localStorage.setItem("jello-token", token);
+          localStorage.setItem("jello-userID", id);
           this.$router.push({
             name: "Home",
-            params: { userData: user },
           });
         })
         .catch((err) => console.log(err));
@@ -200,31 +196,7 @@ export default {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
     },
-    // fetchUsernames: function () {
-    //   axios({
-    //     url: "/graphql",
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     data: {
-    //       query: `{users{
-    //               username
-    //             }}`,
-    //     },
-    //   })
-    //     .then((res) => {
-    //       const arrayOfUsernameObjects = res.data.data.users;
-    //       let usernameArray = arrayOfUsernameObjects.map((user) => {
-    //         return user.username;
-    //       });
-
-    //       this.unvalidUsernames = usernameArray;
-    //     })
-    //     .catch((err) => console.log(err));
-    // },
   },
-  // mounted: function () {
-  //   this.fetchUsernames();
-  // },
 };
 </script>
 
@@ -265,5 +237,11 @@ export default {
 [data-tip]:hover:before,
 [data-tip]:hover:after {
   display: block;
+}
+
+.regButton:hover,
+.regButton:active {
+  background: #eceff9;
+  box-shadow: inset 20px 20px 60px #c9cbd4, inset -20px -20px 60px #ffffff;
 }
 </style>
