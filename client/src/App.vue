@@ -2,10 +2,20 @@
   <div id="app">
     <div
       id="nav"
+      class="bg-blue-500"
       v-if="this.$route.path !== '/' && this.$route.path !== '/register'"
     >
-      <router-link to="/home">home</router-link>
-      <router-link to="/about">About</router-link>
+      <div class="flex-1"></div>
+      <div class="flex flex-row items-center justify-between w-24">
+        <img
+          src="./assets/trello-logo.png"
+          alt="Trello Logo"
+          height="25px"
+          width="25px"
+        />
+        <h1 class="text-3xl text-white">Jello</h1>
+      </div>
+      <h2 class="flex-1 text-right tex">Settings</h2>
     </div>
     <router-view />
   </div>
@@ -21,11 +31,17 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  background-color: #eceff9;
+  min-height: 100vh;
+  height: fit-content;
 }
 
 #nav {
-  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  height: 10vh;
 }
 
 #nav a {
