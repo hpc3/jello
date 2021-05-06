@@ -1,11 +1,11 @@
 
 
 <template>
-  <div class="home">
-    <h1>Projects</h1>
+  <div class="home pl-10 pr-10 pt-10 flex flex-col justify-start items-center">
+    <h1 class="text-3xl text-blue-500">Projects</h1>
     <h2 v-show="error.length" class="text-red-500">{{ error }}</h2>
 
-    <div id="project-wrapper">
+    <div class="flex w-3/4 pt-6 flex-wrap">
       <project-card
         v-for="project in me.projects"
         :key="project.id"
@@ -13,14 +13,13 @@
         :projectId="project.id"
       >
       </project-card>
-      <button id="addNewProjectButton" @click="openThing">
-        <div
-          class="border-green-600 rounded-full border-2 flex flex-1 items-center justify-center text-5xl text-green-500"
-          style="height: 10px; width: 10px"
-        >
-          +
-        </div>
-        <h1 class="flex-1">New Project</h1>
+      <button
+        id="addNewProjectButton"
+        @click="openThing"
+        class="pb-2 text-green-500"
+      >
+        <div>+</div>
+        <div>Add New Project</div>
       </button>
 
       <create-new-project
@@ -82,20 +81,27 @@ export default {
 </script>
 
 <style scoped>
-#project-wrapper {
-  display: flex;
-}
-
-li {
-  list-style: none;
+.home {
+  height: fit-content;
+  min-height: 90vh;
 }
 
 #addNewProjectButton {
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 10px;
   box-sizing: border-box;
   height: 100px;
-  width: 100px;
-  border: 2px solid black;
+  width: 150px;
+  margin: 10px 10px;
+  background: linear-gradient(145deg, #fdffff, #d4d7e0);
+  box-shadow: 8px 8px 16px #b6b8c0, -8px -8px 16px #ffffff;
+  border-radius: 10%;
+}
+
+#addNewProjectButton:hover {
+  background: linear-gradient(145deg, #d4d7e0, #fdffff);
+  box-shadow: 8px 8px 16px #b6b8c0, -8px -8px 16px #ffffff;
 }
 </style>
