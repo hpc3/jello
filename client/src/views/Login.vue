@@ -1,10 +1,10 @@
 <template>
   <div
     id="loginContainer"
-    class="flex flex-col items-center justify-center h-screen bg-lightBackground"
+    class="flex flex-col items-center justify-center h-screen"
   >
     <div
-      class="rounded-xl h-3/5 w-3/5 max-w-lg items-center flex flex-col justify-evenly testContainer"
+      class="rounded-xl sm:h-3/5 sm:w-3/5 w-5/6 h-3/5 max-w-lg items-center flex flex-col justify-evenly testContainer"
     >
       <div
         class="flex items-center justify-between flex-1"
@@ -25,7 +25,7 @@
 
       <div
         id="mainLogin"
-        class="flex flex-col flex-1 justify-center w-2/3 max-w-md"
+        class="flex flex-col flex-1 justify-evenly w-3/4 sm:w-2/3 max-w-md"
         v-show="!loading"
       >
         <h4 v-show="error.length" class="text-red-500 pb-3">{{ error }}</h4>
@@ -42,9 +42,9 @@
           v-model="password"
         />
       </div>
-      <div class="flex w-2/3 justify-around items-center flex-1">
+      <div class="flex w-3/4 sm:w-2/3 justify-around items-center flex-1">
         <button
-          class="rounded-3xl w-32 h-11 text-green-500 p-2 shadow-neumorButton focus:outline-none active:shadow-inner"
+          class="rounded-3xl sm:w-32 w-24 h-11 text-green-500 p-2 shadow-neumorButton focus:outline-none active:shadow-inner loginButton"
           style="background: #eceff9"
           @click="loginUser"
         >
@@ -52,7 +52,7 @@
         </button>
         <router-link to="/register">
           <button
-            class="rounded-3xl w-32 h-11 text-blue-500 p-2 shadow-neumorButton focus:outline-none active:shadow-inner"
+            class="rounded-3xl sm:w-32 w-24 h-11 text-blue-500 p-2 shadow-neumorButton focus:outline-none active:shadow-inner loginButton"
             style="background: #eceff9"
           >
             Register
@@ -94,8 +94,6 @@ export default {
               loginUser(identifier: $identifier, password: $password) {
                 user {
                   id
-                  username
-                  email
                 }
                 token
               }
@@ -110,9 +108,9 @@ export default {
           const { user, token } = res.data.loginUser;
 
           localStorage.setItem("jello-token", token);
+          localStorage.setItem("jello-userID", user.id);
           this.$router.push({
             name: "Home",
-            params: { userData: user },
           });
         })
         .catch((error) => {
@@ -152,21 +150,18 @@ export default {
 
 
 <style scoped>
-.loginContainerShadow {
-  box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
-}
-
 .testContainer {
   background: linear-gradient(225deg, #fdffff, #d4d7e0);
   box-shadow: -35px 35px 70px #b8bac2, 35px -35px 70px #ffffff;
 }
 
-.testContainerDark {
-  background: linear-gradient(145deg, #2e2e2e, #272727);
-  box-shadow: 14px 14px 28px #252525, -14px -14px 28px #313131;
+.loginButton {
+  background: linear-gradient(145deg, #fdffff, #d4d7e0);
 }
 
-.testShadow {
-  box-shadow: 11px 11px 22px #b8bac2, -11px -11px 22px #ffffff;
+.loginButton:hover,
+.loginButton:active {
+  background: #eceff9;
+  box-shadow: inset 20px 20px 60px #c9cbd4, inset -20px -20px 60px #ffffff;
 }
 </style>
