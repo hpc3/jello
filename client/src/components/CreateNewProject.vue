@@ -7,6 +7,7 @@
       <h1 class="text-2xl text-blue-500">Add New Project</h1>
       <h2 class="text-red-500" v-show="error.length">{{ error }}</h2>
       <input
+        id="newProjectInput"
         type="text"
         placeholder="Project Title"
         class="border-blue-300 border-4 pl-2 rounded-lg"
@@ -14,12 +15,12 @@
       />
       <div class="flex justify-around">
         <button
-          class="border-2 w-20 self-center rounded-full bg-blue-500 text-white p-1"
+          class="w-20 self-center rounded-full text-blue-500 p-1 inputButtons"
           @click="submit"
         >
           Create</button
         ><button
-          class="border-2 w-20 self-center rounded-full bg-red-500 text-white p-1"
+          class="w-20 self-center rounded-full text-red-500 p-1 inputButtons"
           @click="closeModal"
         >
           Cancel
@@ -101,6 +102,7 @@ export default {
   },
   mounted() {
     this.closeOnOffClick();
+    document.getElementById("newProjectInput").focus();
   },
   beforeDestroy() {
     window.removeEventListener("click", this.closeModalEventListener);
@@ -112,10 +114,27 @@ export default {
 
 <style scoped>
 #createNewProjectContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
   z-index: 1;
   background: rgba(0, 0, 0, 0.8);
-  position: fixed;
-  height: 100vh;
-  width: 100vw;
+}
+
+#inputWrapper {
+  background: linear-gradient(145deg, #1e1e1e, #191919);
+  box-shadow: 7px 7px 14px #0e0e0e, -7px -7px 14px #2a2a2a;
+}
+
+.inputButtons {
+  background: linear-gradient(145deg, #1e1e1e, #191919);
+  box-shadow: 7px 7px 14px #0e0e0e, -7px -7px 14px #2a2a2a;
+}
+
+.inputButtons:hover {
+  background: #1c1c1c;
+  box-shadow: inset 7px 7px 14px #0e0e0e, inset -7px -7px 14px #2a2a2a;
 }
 </style>
