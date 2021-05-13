@@ -11,6 +11,9 @@
         :key="project.id"
         :projectTitle="project.title"
         :projectId="project.id"
+        :allProjectTitles="arrayOfProjectTitles"
+        @edit-project-title="editProjectTitle"
+        @delete-project="deleteProject"
       >
       </project-card>
       <button
@@ -75,6 +78,28 @@ export default {
       this.me.projects.push(project);
 
       this.displayCreateNewProjectModal = false;
+    },
+    editProjectTitle: function ({ id, newTitle }) {
+      this.me.projects.forEach((project) => {
+        if (project.id === id) {
+          project.title = newTitle;
+        }
+      });
+    },
+    deleteProject: function (projectID) {
+      const { projects } = this.me;
+
+      this.me.projects = projects.filter((project) => project.id !== projectID);
+    },
+  },
+  computed: {
+    arrayOfProjectTitles: function () {
+      let projectTitles = [];
+
+      const projects = this.me.projects;
+
+      projectTitles = projects.map((project) => project.title);
+      return projectTitles;
     },
   },
 };
