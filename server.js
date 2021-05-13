@@ -52,6 +52,13 @@ async function startApolloServer() {
         email: String!
       ): LoginObject
       createNewProject(id: ID!, title: String!): Project
+      deleteProject(userID: ID!, projectID: ID!, token: String!): String!
+      editProjectTitle(
+        userID: ID!
+        projectID: ID!
+        newTitle: String!
+        token: String!
+      ): String!
     }
   `;
 
@@ -102,7 +109,7 @@ async function startApolloServer() {
             throw new Error("Password does not match");
           }
 
-          const token = jwt.sign(currentUser, process.env.JWT_SECRET_TOKEN);
+          const token = jwt.sign(currentUser.id, process.env.JWT_SECRET_TOKEN);
 
           const loginObject = {
             user: currentUser,
@@ -199,10 +206,88 @@ async function startApolloServer() {
           return error;
         }
       },
+      deleteProject: async function (
+        parent,
+        { userID, projectID, token },
+        context
+      ) {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/users/${userID}`
+          );
+
+          const userData = response.data;
+
+          const { projects } = userData;
+
+          const checkIfProjectExists = projects.some(
+            (project) => project.id == projectID
+          );
+
+          if (!checkIfProjectExists) {
+            throw new Error("Project doesn't exist");
+          }
+
+          const updated = projects.filter((project) => project.id != projectID);
+
+          await axios.patch(`http://localhost:3000/users/${userID}`, {
+            projects: updated,
+          });
+
+          return true;
+        } catch (error) {
+          return error;
+        }
+      },
+      editProjectTitle: async function (
+        parent,
+        { userID, projectID, newTitle, token }
+      ) {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/users/${userID}`
+          );
+
+          const userData = response.data;
+
+          const { projects } = userData;
+
+          const checkIfProjectTitleExists = projects.some(
+            (project) => project.title === newTitle
+          );
+
+          if (checkIfProjectTitleExists) {
+            throw new Error("Project Title Taken");
+          }
+
+          projects.forEach((project) => {
+            if (project.id == projectID) {
+              project.title = newTitle;
+              return;
+            }
+            return;
+          });
+
+          await axios.patch(`http://localhost:3000/users/${userID}`, {
+            projects,
+          });
+
+          return true;
+
+          // find project with the same project ID
+          // Change title value
+          // patch project object
+        } catch (error) {
+          return error;
+        }
+      },
     },
   };
 
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
   await server.start();
 
   const app = express();
