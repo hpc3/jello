@@ -62,7 +62,7 @@ export default {
         return;
       }
 
-      const a2z = new RegExp("^[a-zA-Z]+$");
+      const a2z = new RegExp("^[a-zA-Z ]+$");
 
       if (!a2z.test(this.title)) {
         this.error = "Title can only contain letters";
